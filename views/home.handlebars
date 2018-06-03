@@ -1,8 +1,9 @@
-<div class="container">
-
+<div class="contatiner">
     <div class="col-md-12 jumbotron">
         <div class="text-center">
-            <h1> Saved Articles</h1>
+            <h1>
+                Travel and Leisure Article Scraper
+            </h1>
         </div>
     </div>
     <div class="col-md-12">
@@ -18,22 +19,21 @@
                     {{this.summary}}
                 </p>
                 <a href={{this.link}} target="_blank">
-                    {{this.link}}
+                    www.travelandleisure.com{{this.link}}
                 </a>
                 <br>
                 <br>
-                <button type="button" class="btn btn-success addComments" data-toggle="modal" data-target="#commentsModal{{this._id}}" data-id={{this._id}}>Add a Comment</button>
-                <button type="button" class="btn btn-danger delete" data-id={{this._id}}>Delete</button>
+                <button type="button" class="btn btn-success save" data-id={{this._id}}>Save Article</button>
             </div>
         </div>
         {{/each}} {{else}}
         <div class="panel panel-default">
             <div class="panel-body">
-                <h4>You have 0 saved articles.</h4>
+                <h4>
+                    No new articles!
+                </h4>
             </div>
         </div>
         {{/if}}
     </div>
 </div>
-
-{{#each article}} {{> comments-modal }} {{/each}}

@@ -25,8 +25,9 @@ var app = express();
 // Use morgan logger for logging requests
 app.use(logger("dev"));
 // Use body-parser for handling form submissions
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({ extended: true }));
 // Use express.static to serve the public folder as a static directory
+var public = require("path").join(__dirname,"/public");
 app.use(express.static("public"));
 
 
@@ -56,7 +57,6 @@ app.get("/", function (req, res) {
         var hbsObj = {
             article: data
         };
-        console.log(hbsObj);
         res.render("home", hbsObj);
     })
 });
@@ -79,15 +79,16 @@ app.get("/saved", function (req, res) {
 app.get("/scrape", function (req, res) {
 
     // grab the body of the html with request
-    axios.get("http://www.travelandleisure.com/").then(function (response) {
+    request("http://www.travelandleisure.com/", function (error, response, html) {
 
-        var $ = cheerio.load(response.data);
+        var $ = cheerio.load(html);
 
         $("li[class=margin-8-tb]").each(function (i, element) {
             var result = {};
+            
 
             result.title = $(this).children("a").text();
-            result.link = $(this).children("a").attr("href");
+            result.link = "www.travelandleisure.com"+$(this).children("a").attr("href");
 
             var entry = new Article(result);
 
@@ -100,11 +101,11 @@ app.get("/scrape", function (req, res) {
                     console.log(doc);
                 }
             });
-
         });
         res.send("Scrape Complete");
     });
 });
+
 
 //get articles from MongoDB
 app.get("/articles", function (req, res) {
