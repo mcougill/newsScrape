@@ -6,9 +6,13 @@ var Schema = mongoose.Schema;
 // Using the Schema constructor, create a new CommentsSchema object
 var CommentsSchema = new Schema({
 
-  title: String,
-
-  body: String
+ body: {
+   type: String
+ },
+ article: {
+   type: Schema.Types.ObjectId,
+   ref: "Article"
+ }
 });
 
 var Comments = mongoose.model("Comments", CommentsSchema);

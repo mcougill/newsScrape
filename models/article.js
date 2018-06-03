@@ -1,4 +1,5 @@
 var mongoose = require("mongoose");
+var Comments = require("./Comments");
 
 //save reference to Schema constructor
 var Schema = mongoose.Schema;
@@ -13,6 +14,10 @@ var ArticleSchema = new Schema({
     link: {
         type: String,
         required:true
+    },
+    saved: {
+        type: Boolean,
+        default: false
     },
 
     comments: {

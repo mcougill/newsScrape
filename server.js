@@ -3,37 +3,79 @@ var exphbs = require("express-handlebars");
 var bodyParser = require("body-parser");
 var logger = require("morgan");
 var mongoose = require("mongoose");
-var request = require("request");
+var path = require("path");
 
 //scraping tools
-var axios = require("axios");
+var request = require("request");
 var cheerio = require("cheerio");
 
-//require all models
-var db = require("./models");
+var Comments = require("./models/Comments.js");
+var Article = require("./models/Article.js");
+
+mongoose.Promise = Promise;
 
 var PORT = process.env.PORT || 3000;
 
 //Initialize Express
 var app = express();
 
+
 // Configure middleware
 
 // Use morgan logger for logging requests
 app.use(logger("dev"));
 // Use body-parser for handling form submissions
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({ extended: false }));
 // Use express.static to serve the public folder as a static directory
 app.use(express.static("public"));
 
+
+app.engine("handlebars", exphbs({
+    defaultLayout: "main",
+    partialsDir: path.join(__dirname, "/views/layouts/partials")
+}));
+app.set("view engine", "handlebars");
+
 //Connect to MongoDB
 mongoose.connect("mongodb://localhost/newsscraper");
+var db = mongoose.connection;
 
+db.on("error", function (error) {
+    console.log("Mongoose Error: ", error);
+})
+
+db.once("open", function () {
+    console.log("Mongoose connected.");
+});
+
+//ROUTES
+
+//render handlebars pages
 app.get("/", function (req, res) {
-    res.send("Hello world");
+    Article.find({ "saved": false }, function (error, data) {
+        var hbsObj = {
+            article: data
+        };
+        console.log(hbsObj);
+        res.render("home", hbsObj);
+    })
+});
+
+app.get("/saved", function (req, res) {
+    Article.find({
+        "saved": true
+    })
+        .populate("comments")
+        .exec(function (error, articles) {
+            var hbsObj = {
+                article: articles
+            };
+            res.render("saved", hbsObj);
+        });
 });
 
 
+//scrape T&L website
 app.get("/scrape", function (req, res) {
 
     // grab the body of the html with request
@@ -47,20 +89,142 @@ app.get("/scrape", function (req, res) {
             result.title = $(this).children("a").text();
             result.link = $(this).children("a").attr("href");
 
+            var entry = new Article(result);
 
-            db.Article.create(result)
-                .then(function (dbArticle) {
+            //save to db
+            entry.save(function (err, doc) {
+                if (err) {
+                    console.log(err);
+                }
+                else {
+                    console.log(doc);
+                }
+            });
 
-                    console.log(dbArticle);
-                })
-                .catch(function (err) {
-
-                    return res.json(err);
-                });
         });
-
-
         res.send("Scrape Complete");
+    });
+});
+
+//get articles from MongoDB
+app.get("/articles", function (req, res) {
+
+    Article.find({}, function (error, doc) {
+        if (error) {
+            console.log(error);
+        }
+        else {
+            (res.json(doc));
+        }
+    });
+});
+
+//get article by ID
+app.get("/articles/:id", function (req, res) {
+    Article.findOne({
+        "_id": req.params.id
+    })
+        .populate("comments")
+        .exec(function (error, doc) {
+            if (error) {
+                console.log(error);
+            }
+            else {
+                res.json(doc);
+            }
+        });
+});
+
+//save article 
+app.post("/articles/save/:id", function (req, res) {
+    Article.findOneAndUpdate({
+        "_id": req.params.id
+    }, {
+            "saved": true
+        })
+        .exec(function (err, doc) {
+            if (err) {
+                console.log(err);
+            }
+            else {
+                res.send(doc);
+            }
+        });
+});
+
+//delete article
+app.post("/articles/delete/:id", function (req, res) {
+    Article.findOneAndUpdate({
+        "_id": req.params.id
+    }, {
+            "saved": false, "comments": []
+        }
+    )
+        .exec(function (err, doc) {
+            if (err) {
+                console.log(err);
+            } else {
+                res.send(doc);
+            }
+        });
+});
+
+//add comments
+app.post("/comments/save/:id", function (req, res) {
+    var newComments = new Comments({
+        body: req.body.text,
+        article: req.params.id
+    });
+    newComments.save(function (error, comments) {
+        if (error) {
+            console.log(error)
+        } else {
+            Article.findOneAndUpdate({
+                "_id": req.params.id
+            }, {
+                    $push: {
+                        "comments": comments
+                    }
+                })
+                .exec(function (err) {
+                    if (err) {
+                        console.log(err);
+                        res.send(err);
+                    }
+                    else {
+                        res.send(note);
+                    }
+                });
+        }
+    });
+});
+
+//delete comments
+app.delete("/comments/delete/:comments_id/:article_id", function (req, res) {
+    Comments.findOneAndRemove({
+        "_id": req.params.comments_id
+    }, function (err) {
+        if (err) {
+            console.log(err);
+            res.send(err);
+        }
+        else {
+            Article.findOneAndUpdate({
+                "_id": req.params.article_id
+            }, {
+                    $pull: {
+                        "comments": req.params.comments_id
+                    }
+                })
+                .exec(function (err) {
+                    if (err) {
+                        console.log(err);
+                        res.send(err)
+                    } else {
+                        res.send("Comment Deleted");
+                    }
+                });
+        }
     });
 });
 
