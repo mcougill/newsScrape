@@ -9,16 +9,22 @@ $("#scrape").on("click", function () {
     });
 });
 
-//save article button
-$(".save").on("click", function () {
-    console.log("article saved")
-    var id = $(this).attr("data-id");
+//Set clicked nav option to active
+$(".navbar-light").click(function() {
+    $(".navbar-light").removeClass("active");
+    $(this).addClass("active");
+ });
+
+//Handle Save Article button
+$(".save").on("click", function() {
+    console.log("saved article");
+    var thisId = $(this).attr("data-id");
     $.ajax({
         method: "POST",
-        url: "articles/save" + id
-    }).done(function (data) {
+        url: "/articles/save/" + thisId
+    }).done(function(data) {
         window.location = "/"
-    });
+    })
 });
 
 //delete article button

@@ -1,4 +1,21 @@
-body {
-    color:red;
+.jumbotron{
+    background: url("../img/desert.jpg") ;
+    background-size:100%;
+    width: 50%;
+    margin: auto;
+    font-family: 'Satisfy', cursive;
 }
 
+body {
+    font-family: 'Cabin', sans-serif;
+    background-color: #cdc0b0
+}
+
+
+h4 {
+    font-family: 'Anton', sans-serif;
+}
+
+.navbar {
+    margin-bottom:20px;
+}
