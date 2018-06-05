@@ -181,6 +181,7 @@ app.post("/comments/save/:id", function (req, res) {
         article: req.params.id
     });
     newComments.save(function (error, comments) {
+        console.log(comments);
         if (error) {
             console.log(error)
         } else {
