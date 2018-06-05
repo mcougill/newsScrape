@@ -15,7 +15,7 @@ $(".navbar-light").click(function() {
     $(this).addClass("active");
  });
 
-//Handle Save Article button
+//Save Article button
 $(".save").on("click", function() {
     console.log("saved article");
     var thisId = $(this).attr("data-id");
@@ -29,10 +29,12 @@ $(".save").on("click", function() {
 
 //delete article button
 $(".delete").on("click", function(){
+    console.log("tried to delete");
     var id = $(this).attr("data-id");
+    console.log(id);
     $.ajax({
         method:"POST",
-        url:"/articles/delete" + id
+        url:"/articles/delete/" + id
     }).done(function(data){
         window.location = "/saved"
     });

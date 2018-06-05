@@ -25,7 +25,7 @@ var app = express();
 // Use morgan logger for logging requests
 app.use(logger("dev"));
 // Use body-parser for handling form submissions
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({ extended: false }));
 // Use express.static to serve the public folder as a static directory
 var public = require("path").join(__dirname,"/public");
 app.use(express.static("public"));
@@ -155,10 +155,13 @@ app.post("/articles/save/:id", function (req, res) {
 
 //delete article
 app.post("/articles/delete/:id", function (req, res) {
+    console.log("server.js deleted");
+  
+
     Article.findOneAndUpdate({
         "_id": req.params.id
     }, {
-            "saved": false, "comments": []
+            "saved": false
         }
     )
         .exec(function (err, doc) {

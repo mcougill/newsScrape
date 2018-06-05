@@ -4,18 +4,40 @@
     width: 50%;
     margin: auto;
     font-family: 'Satisfy', cursive;
+    border-radius: 25px;
+    color:#001a33
+    
 }
 
 body {
     font-family: 'Cabin', sans-serif;
-    background-color: #cdc0b0
+    background-color: #001a33
 }
 
 
 h4 {
     font-family: 'Anton', sans-serif;
+    margin-top:30px;
+    padding-top:10px;
+    color:#cdc0b0
 }
 
 .navbar {
     margin-bottom:20px;
+}
+
+.panel {
+    background-color: rgba(51, 25, 0, 1);
+    width:60%;
+    text-align: center;
+    margin:auto;
+    border-radius: 25px;
+}
+
+.link {
+    color:#cdc0b0;
+}
+
+.btn {
+    margin-bottom:10px;
 }
