@@ -40,7 +40,7 @@ $(".delete").on("click", function(){
     });
 });
 
-//save comment button
+//save comments button
 $(".saveComments").on("click", function(){
     var id = $(this).attr("data-id");
     $.ajax({

@@ -175,6 +175,7 @@ app.post("/articles/delete/:id", function (req, res) {
 
 //add comments
 app.post("/comments/save/:id", function (req, res) {
+    console.log("server.js comments");
     var newComments = new Comments({
         body: req.body.text,
         article: req.params.id
@@ -196,7 +197,7 @@ app.post("/comments/save/:id", function (req, res) {
                         res.send(err);
                     }
                     else {
-                        res.send(note);
+                        res.send(comments);
                     }
                 });
         }

@@ -1,4 +1,3 @@
-
 <div class="container">
 
     <div class="col-md-12 jumbotron">
@@ -10,7 +9,7 @@
         {{#if article}} {{#each article}}
         <div class="panel panel-default">
             <div class="panel-heading">
-                <h4>
+                <h4 class="articleTitle">
                     {{this.title}}
                 </h4>
             </div>
@@ -23,8 +22,16 @@
                 </a>
                 <br>
                 <br>
+
+                <!--Modal button -->
                 <button type="button" class="btn btn-dark addComments" data-toggle="modal" data-target="#commentsModal{{this._id}}" data-id={{this._id}}>Add a Comment</button>
+
+
+
+
+                <!--DELETE BUTTON -->
                 <button type="button" class="btn btn-danger delete" data-id={{this._id}}>Delete</button>
+
             </div>
         </div>
         {{/each}} {{else}}
