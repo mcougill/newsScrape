@@ -4,7 +4,8 @@ var bodyParser = require("body-parser");
 var logger = require("morgan");
 var mongoose = require("mongoose");
 var path = require("path");
-var mongodb = require("mongodb");
+var MongoClient =require("mongodb").MongoClient;
+var assert = require("assert");
 
 //scraping tools
 var request = require("request");
