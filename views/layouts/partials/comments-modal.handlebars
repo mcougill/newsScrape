@@ -14,7 +14,7 @@
             <div class="modal-body">
                 {{#if this.comments}} {{#each this.comments}}
                 <div class="panel panel-default modalStyle">
-                    <p class="previousComments">{{this.body}}</p>
+                    <p class="previousComments">{{this.comments}}</p>
                     <button type="button" class="btn btn-danger deleteComments" data-comments-id={{this._id}} data-article-id={{this.article}}>X</button>
                 </div>
             </div>

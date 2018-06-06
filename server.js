@@ -4,6 +4,7 @@ var bodyParser = require("body-parser");
 var logger = require("morgan");
 var mongoose = require("mongoose");
 var path = require("path");
+var mongodb = require("mongodb");
 
 //scraping tools
 var request = require("request");
@@ -38,7 +39,7 @@ app.engine("handlebars", exphbs({
 app.set("view engine", "handlebars");
 
 //Connect to MongoDB
-mongoose.connect("mongodb://localhost/newsscraper");
+mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/newsscraper");
 var db = mongoose.connection;
 
 db.on("error", function (error) {
@@ -181,7 +182,7 @@ app.post("/comments/save/:id", function (req, res) {
         article: req.params.id
     });
     newComments.save(function (error, comments) {
-        console.log(comments);
+        console.log(comments.body);
         if (error) {
             console.log(error)
         } else {

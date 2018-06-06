@@ -39,7 +39,6 @@ $(".delete").on("click", function(){
 
 //save comments button
 $(".saveComments").on("click", function(){
-    console.log('save button clicked');
     var id = $(this).attr("data-id");
     $.ajax({
         method: "POST",
