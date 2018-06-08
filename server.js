@@ -42,7 +42,6 @@ app.set("view engine", "handlebars");
 
 //Connect to MongoDB
 mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/newsscraper");
-console.log(process.env.MONGODB_URI);
 var db = mongoose.connection;
 
 db.on("error", function (error) {
