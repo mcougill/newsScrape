@@ -41,7 +41,8 @@ app.engine("handlebars", exphbs({
 app.set("view engine", "handlebars");
 
 //Connect to MongoDB
-mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/newsscraper");
+mongoose.connect(process.env.MONGODB_URI);
+    //|| "mongodb://localhost/newsscraper");
 var db = mongoose.connection;
 
 db.on("error", function (error) {
