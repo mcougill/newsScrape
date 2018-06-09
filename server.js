@@ -13,7 +13,7 @@ var request = require("request");
 var cheerio = require("cheerio");
 
 var Comments = require("./models/Comments.js");
-var Article = require("article.js");
+var Article = require("Article.js");
 
 mongoose.Promise = Promise;
 
