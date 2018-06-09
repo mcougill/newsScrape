@@ -6,7 +6,7 @@ var mongoose = require("mongoose");
 var path = require("path");
 var MongoClient =require("mongodb").MongoClient;
 var assert = require("assert");
-require('dotenv').config();
+var dotenv = require('dotenv').config();
 
 //scraping tools
 var request = require("request");
