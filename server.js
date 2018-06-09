@@ -12,7 +12,7 @@ var dotenv = require('dotenv').config();
 var request = require("request");
 var cheerio = require("cheerio");
 
-var Comments = require("./comments.js");
+var Comments = require("./Comments.js");
 var Article = require("./article.js");
 
 mongoose.Promise = Promise;
